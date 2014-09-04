@@ -58,9 +58,11 @@
             {{#movies}}
 
                 <div class="movie">
-                    <img class="poster" src="{{poster}}" alt="{{title}}">
+                    {{#poster}}
+                        <img class="poster" src="{{poster}}" alt="{{title}}">
+                    {{/poster}}
                     <h1 class="title">{{title}}</h1>
-                    <span class="time">{{duration}}</span>
+                    <span class="time">{{duration}} - Release: {{year}} - Genre: {{genre}}</span>
                     <p class="description">{{description}}</p>
                     <div class="clear"></div>
                 </div>

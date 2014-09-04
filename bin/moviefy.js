@@ -9,7 +9,19 @@ var fs = require("fs"),
 // [Request Module](https://www.npmjs.org/package/request)
     request = require("request"),
 // [Mustache](https://www.npmjs.org/package/mustache)
-    Mustache = require("mustache");
+    Mustache = require("mustache"),
+// [Commander.js](https://www.npmjs.org/package/commander)
+    program = require("commander");
+
+
+// Commands and options with commander.js
+// ======================================
+
+program
+    .version(require("../package.json").version)
+    .option("-l, --language [lang]", "specifies the language - as a ISO County Code [US]", "US")
+    .option("-o, --output [name]", "which name the output HTML file should have [movies]", "movies");
+
 
 // Get all movies
 // ==============
@@ -24,6 +36,32 @@ var fs = require("fs"),
 var movieList = fs.readdirSync('.').filter(function(element){
     return fs.statSync(element).isDirectory();
 });
+
+// Maybe delete all info.json files
+// ================================
+// If the ```reset``` command is called, we need to delete every
+// ```info.json``` file in every folder.
+//
+// After that, we can exit the tool.
+program
+    .command("reset")
+    .description("deletes every info.json file")
+    .action(function(){
+        for(var i = 0; i < movieList.length; i++){
+            var path = "./" + movieList[i] + "/info.json";
+            if(fs.existsSync(path)){
+                fs.unlinkSync(path);
+            }
+        }
+        
+        console.log("All information is resetted.");
+        
+        // End the tool with success
+        process.exit(0);
+        
+    });
+
+program.parse(process.argv);
 
 // Filter the list
 // ===============
@@ -80,9 +118,8 @@ var counter = 0;
 // This function queries the iTunes search API
 function getInfo(title){
     
-    // Construct the URL
-    var url = "https://itunes.apple.com/search?country=DE&media=movie&limit=1&term=" + title;
-    
+    var url = constructLink(title);
+     
     request(url, function (error, response, body) {
         
         if (!error && response.statusCode == 200) {
@@ -107,6 +144,21 @@ function getInfo(title){
     })
 }
 
+// Link construction
+// -----------------
+// Constructs the link with all options that were given
+function constructLink(title){
+    
+    // Construct the URL
+    var url = "https://itunes.apple.com/search?media=movie&limit=1&term=" + title;
+    
+    // language option
+    url += "&country=" + program.language;
+    
+    return url;
+    
+}
+
 // This function sets the JSON for the movie
 // and saves it to the disk.
 function createInfo(title, json){
@@ -115,7 +167,7 @@ function createInfo(title, json){
     var movie = {
         title: title,
         description: "No Description",
-        poster: "http://moviecarpet.com/wp-content/uploads/2011/05/no-poster.jpg",
+        poster: "",
         duration: "Unknown",
         genre: "Unknown",
         year: "Unknown",
@@ -194,7 +246,7 @@ function renderTemplate(movies){
     var template = fs.readFileSync(dir + "/template.html");
     var output = Mustache.render(String(template), movies);
     
-    fs.writeFileSync("movies.html", output);
+    fs.writeFileSync(program.output + ".html", output);
     
 }
 
