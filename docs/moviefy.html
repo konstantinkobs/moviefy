@@ -272,15 +272,15 @@ save the JSON file in the directory.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
-              <p>Go through all new movies and start the AJAX request
-for(var i = 0; i &lt; newMovies.length; i++){
-   getInfo(newMovies[i]);
-}</p>
+              <p>Go through all new movies and start the AJAX request</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>
-getInfo(<span class="hljs-number">0</span>);</pre></div></div>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">for</span>(<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; newMovies.length; i++){
+    getInfo(newMovies[i]);
+}
+
+<span class="hljs-keyword">var</span> counter = <span class="hljs-number">0</span>;</pre></div></div>
             
         </li>
         
@@ -295,17 +295,7 @@ getInfo(<span class="hljs-number">0</span>);</pre></div></div>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getInfo</span><span class="hljs-params">(index)</span></span>{
-    
-    <span class="hljs-keyword">var</span> title = newMovies[index];
-    
-    <span class="hljs-keyword">if</span>(index === newMovies.length){
-        
-        nextStep();
-        
-        <span class="hljs-keyword">return</span>;
-        
-    }</pre></div></div>
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getInfo</span><span class="hljs-params">(title)</span></span>{</pre></div></div>
             
         </li>
         
@@ -332,11 +322,16 @@ getInfo(<span class="hljs-number">0</span>);</pre></div></div>
             
             <span class="hljs-built_in">console</span>.log(title);
             
-            getInfo(index + <span class="hljs-number">1</span>);
-            
+        } <span class="hljs-keyword">else</span>{
+            <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"Failed to get information from iTunes for "</span> + title);
+            process.exit(<span class="hljs-number">1</span>);
         }
         
+        counter++;
         
+        <span class="hljs-keyword">if</span>(counter === newMovies.length){
+            nextStep();
+        }
     
     })
 }</pre></div></div>
@@ -410,16 +405,6 @@ values.</p>
     
     fs.writeFileSync(<span class="hljs-string">"./"</span> + title + <span class="hljs-string">"/info.json"</span>, <span class="hljs-built_in">JSON</span>.stringify(movie));
     
-}
-
-
-
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">nextStep</span><span class="hljs-params">()</span></span>{
-    
-    <span class="hljs-keyword">var</span> movies = readAllInfo();
-    
-    renderTemplate({movies: movies});
-    
 }</pre></div></div>
             
         </li>
@@ -431,9 +416,19 @@ values.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-22">&#182;</a>
               </div>
-              <h1 id="read-all-movie-information">Read all movie information</h1>
+              <p>This is the callback function for having all new <code>info.json</code>
+files created. We then simply call the functions below for
+finishing the process.</p>
 
             </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">nextStep</span><span class="hljs-params">()</span></span>{
+    
+    <span class="hljs-keyword">var</span> movies = readAllInfo();
+    
+    renderTemplate({movies: movies});
+    
+}</pre></div></div>
             
         </li>
         
@@ -443,6 +438,19 @@ values.</p>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <h1 id="read-all-movie-information">Read all movie information</h1>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
               </div>
               <p>Now we need to read all the movie information from the
 corresponding <code>info.json</code> files.</p>
@@ -469,11 +477,11 @@ all movie titles of this directory are stored.</p>
         </li>
         
         
-        <li id="section-24">
+        <li id="section-25">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-24">&#182;</a>
+                <a class="pilcrow" href="#section-25">&#182;</a>
               </div>
               <h1 id="render-and-save-the-template">Render and save the template</h1>
 
@@ -482,11 +490,11 @@ all movie titles of this directory are stored.</p>
         </li>
         
         
-        <li id="section-25">
+        <li id="section-26">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-25">&#182;</a>
+                <a class="pilcrow" href="#section-26">&#182;</a>
               </div>
               <p>We want to load the <code>template.html</code> file from disk
 and render that template with our generated <code>movie</code> list.</p>
@@ -509,11 +517,11 @@ directory, that means <em>the root folder</em> of our movies.</p>
         </li>
         
         
-        <li id="section-26">
+        <li id="section-27">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-26">&#182;</a>
+                <a class="pilcrow" href="#section-27">&#182;</a>
               </div>
               <h1 id="helper-functions">Helper functions</h1>
 
@@ -522,11 +530,11 @@ directory, that means <em>the root folder</em> of our movies.</p>
         </li>
         
         
-        <li id="section-27">
+        <li id="section-28">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-27">&#182;</a>
+                <a class="pilcrow" href="#section-28">&#182;</a>
               </div>
               <p>This function converts milliseconds into human readable
 time strings.</p>
@@ -549,11 +557,11 @@ time strings.</p>
         </li>
         
         
-        <li id="section-28">
+        <li id="section-29">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-28">&#182;</a>
+                <a class="pilcrow" href="#section-29">&#182;</a>
               </div>
               <p>This function slices the year from the given
 releaseDate string.</p>
@@ -567,11 +575,11 @@ releaseDate string.</p>
         </li>
         
         
-        <li id="section-29">
+        <li id="section-30">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-29">&#182;</a>
+                <a class="pilcrow" href="#section-30">&#182;</a>
               </div>
               <p>A function that constructs a link
 to a bigger image (600x600)</p>
