@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>moviefy.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>moviefy.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>#!<span class="hljs-regexp">/usr/</span>bin/env node</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <h1 id="requirements">Requirements</h1>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p><a href="http://nodejs.org/api/fs.html">File System</a></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">"fs"</span>),</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p><a href="http://nodejs.org/api/path.html">path</a></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    path = <span class="hljs-built_in">require</span>(<span class="hljs-string">"path"</span>),</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p><a href="https://www.npmjs.org/package/request">Request Module</a></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    request = <span class="hljs-built_in">require</span>(<span class="hljs-string">"request"</span>),</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p><a href="https://www.npmjs.org/package/mustache">Mustache</a></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    Mustache = <span class="hljs-built_in">require</span>(<span class="hljs-string">"mustache"</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <h1 id="get-all-movies">Get all movies</h1>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>First, we need to get all movies
+in the <strong>current</strong> directory.</p>
+<p>Because every movie is in <strong>one</strong> directory,
+every directory represents one movie. So we just need
+to get all the files in the current directory and filter
+for directories.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+<span class="hljs-keyword">var</span> movieList = fs.readdirSync(<span class="hljs-string">'.'</span>).filter(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(element)</span></span>{
+    <span class="hljs-keyword">return</span> fs.statSync(element).isDirectory();
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <h1 id="filter-the-list">Filter the list</h1>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>We need to filter the list, which of these
+directories doesn’t have a <code>info.json</code> file in it,
+because all the information about a movie is stored in
+this file inside of its directory.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+<span class="hljs-keyword">var</span> newMovies = movieList.filter(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(element)</span></span>{
+    <span class="hljs-keyword">return</span> !fs.existsSync(<span class="hljs-string">"./"</span> + element + <span class="hljs-string">"/info.json"</span>);
+});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Now, we have all new movies or better: all the movies
+without any information stored inside of its folder.</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <h1 id="get-information-about-new-movies">Get information about new movies</h1>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>This tool uses the <a href="https://www.apple.com/itunes/affiliates/resources/documentation/itunes-store-web-service-search-api.html">iTunes Search API</a> to retrieve
+information about a movie.</p>
+<p>Every new movie needs an <code>info.json</code> file inside
+of its folder with the following tags in it:</p>
+<ul>
+<li><code>title</code> - <code>String</code> - the title of the movie</li>
+<li><code>description</code> - <code>String</code> - the description of the movie plot</li>
+<li><code>poster</code> - <code>String</code> - a url to the movie poster</li>
+<li><code>duration</code> - <code>String</code> - the length of the movie as a string in this form: <code>hh:mm:ss</code></li>
+<li><code>genre</code> - <code>String</code> - the genre as a string (e.g. <code>Action</code>)</li>
+<li><code>year</code> - <code>Integer</code> - the year the movie came out</li>
+<li><code>trailer</code> - <code>String</code> - a direct url to a trailer</li>
+</ul>
+<p>Not (yet) supported by the iTunes API:</p>
+<ul>
+<li><code>director</code> - <code>String</code> - the director’s name</li>
+<li><code>actors</code> - <code>Array of Strings</code> - an array of actors</li>
+<li><code>watched</code> - <code>Boolean</code> - was the movie watched?</li>
+<li><code>rating</code> - <code>Float</code> - a rating by the user (usually 1-10)</li>
+</ul>
+<p>The not supported tags will be filled with empty values.
+If you want, you can fill them out.</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <h2 id="query-itunes-search-api">Query iTunes Search API</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>For every new movie, search the iTunes API and
+save the JSON file in the directory.</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>Go through all new movies and start the AJAX request
+for(var i = 0; i &lt; newMovies.length; i++){
+   getInfo(newMovies[i]);
+}</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+getInfo(<span class="hljs-number">0</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>This function queries the iTunes search API</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getInfo</span><span class="hljs-params">(index)</span></span>{
+    
+    <span class="hljs-keyword">var</span> title = newMovies[index];
+    
+    <span class="hljs-keyword">if</span>(index === newMovies.length){
+        
+        nextStep();
+        
+        <span class="hljs-keyword">return</span>;
+        
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>Construct the URL</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> url = <span class="hljs-string">"https://itunes.apple.com/search?country=DE&amp;media=movie&amp;limit=1&amp;term="</span> + title;
+    
+    request(url, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(error, response, body)</span> </span>{
+        
+        <span class="hljs-keyword">if</span> (!error &amp;&amp; response.statusCode == <span class="hljs-number">200</span>) {
+            
+            <span class="hljs-keyword">var</span> result = <span class="hljs-built_in">JSON</span>.parse(body).results[<span class="hljs-number">0</span>];
+            
+            createInfo(title, result);
+            
+            <span class="hljs-built_in">console</span>.log(title);
+            
+            getInfo(index + <span class="hljs-number">1</span>);
+            
+        }
+        
+        
+    
+    })
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>This function sets the JSON for the movie
+and saves it to the disk.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">createInfo</span><span class="hljs-params">(title, json)</span></span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>This are the <strong>default values</strong> for an <code>info.json</code> file</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">var</span> movie = {
+        title: title,
+        description: <span class="hljs-string">"No Description"</span>,
+        poster: <span class="hljs-string">"http://moviecarpet.com/wp-content/uploads/2011/05/no-poster.jpg"</span>,
+        duration: <span class="hljs-string">"Unknown"</span>,
+        genre: <span class="hljs-string">"Unknown"</span>,
+        year: <span class="hljs-string">"Unknown"</span>,
+        trailer: <span class="hljs-string">""</span>,
+        director: <span class="hljs-string">""</span>,
+        actors: [],
+        watched: <span class="hljs-literal">false</span>,
+        rating: <span class="hljs-number">0</span>
+    };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>If we found something in iTunes, we will overwrite these
+values.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span>(json){
+        movie.title = json.trackName;
+        movie.description = json.longDescription;
+        movie.poster = getBigPoster(json.artworkUrl100);
+        movie.duration = convertTime(json.trackTimeMillis);
+        movie.genre = json.primaryGenreName;
+        movie.year = getReleaseYear(json.releaseDate);
+        movie.trailer = json.previewUrl;
+    }
+    
+    fs.writeFileSync(<span class="hljs-string">"./"</span> + title + <span class="hljs-string">"/info.json"</span>, <span class="hljs-built_in">JSON</span>.stringify(movie));
+    
+}
+
+
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">nextStep</span><span class="hljs-params">()</span></span>{
+    
+    <span class="hljs-keyword">var</span> movies = readAllInfo();
+    
+    renderTemplate({movies: movies});
+    
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <h1 id="read-all-movie-information">Read all movie information</h1>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <p>Now we need to read all the movie information from the
+corresponding <code>info.json</code> files.</p>
+<p>We will then push these onto an array of movie objects,
+which can be rendered by Mustache.</p>
+<p>Remember the <code>movieList</code> array? This is the array, where
+all movie titles of this directory are stored.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">readAllInfo</span><span class="hljs-params">()</span></span>{
+    
+    <span class="hljs-keyword">return</span> movieList.map(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(title)</span></span>{
+        
+        <span class="hljs-keyword">var</span> info = fs.readFileSync(<span class="hljs-string">"./"</span> + title + <span class="hljs-string">"/info.json"</span>, <span class="hljs-string">"utf8"</span>);
+        
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">JSON</span>.parse(info);
+        
+    })
+    
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <h1 id="render-and-save-the-template">Render and save the template</h1>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <p>We want to load the <code>template.html</code> file from disk
+and render that template with our generated <code>movie</code> list.</p>
+<p>At the end, we will save this file to the <strong>current</strong>
+directory, that means <em>the root folder</em> of our movies.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">renderTemplate</span><span class="hljs-params">(movies)</span></span>{
+    
+    <span class="hljs-keyword">var</span> dir = path.join(path.dirname(fs.realpathSync(__filename)), <span class="hljs-string">'../'</span>);
+    <span class="hljs-keyword">var</span> template = fs.readFileSync(dir + <span class="hljs-string">"/template.html"</span>);
+    <span class="hljs-keyword">var</span> output = Mustache.render(<span class="hljs-built_in">String</span>(template), movies);
+    
+    fs.writeFileSync(<span class="hljs-string">"movies.html"</span>, output);
+    
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-26">&#182;</a>
+              </div>
+              <h1 id="helper-functions">Helper functions</h1>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <p>This function converts milliseconds into human readable
+time strings.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">convertTime</span><span class="hljs-params">(millis)</span></span>{
+    
+    <span class="hljs-keyword">var</span> hours = <span class="hljs-built_in">Math</span>.floor(millis / <span class="hljs-number">36e5</span>).toString(),
+        mins = <span class="hljs-built_in">Math</span>.floor((millis % <span class="hljs-number">36e5</span>) / <span class="hljs-number">6e4</span>).toString(),
+        secs = <span class="hljs-built_in">Math</span>.floor((millis % <span class="hljs-number">6e4</span>) / <span class="hljs-number">1000</span>).toString();
+    
+    mins = mins.length === <span class="hljs-number">1</span> ? <span class="hljs-string">"0"</span> + mins : mins;
+    secs = secs.length === <span class="hljs-number">1</span> ? <span class="hljs-string">"0"</span> + secs : secs;
+    
+    <span class="hljs-keyword">return</span> hours + <span class="hljs-string">":"</span> + mins + <span class="hljs-string">":"</span> + secs;
+    
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <p>This function slices the year from the given
+releaseDate string.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getReleaseYear</span><span class="hljs-params">(string)</span></span>{
+    <span class="hljs-keyword">return</span> string.slice(<span class="hljs-number">0</span>, <span class="hljs-number">4</span>);
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-29">&#182;</a>
+              </div>
+              <p>A function that constructs a link
+to a bigger image (600x600)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getBigPoster</span><span class="hljs-params">(url)</span></span>{
+    <span class="hljs-keyword">return</span> url.replace(<span class="hljs-string">"100x100"</span>, <span class="hljs-string">"600x600"</span>);
+}</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

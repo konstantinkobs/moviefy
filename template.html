@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Movies</title>
+        
+        <style>
+            body{
+                background: #eee;
+            }
+            
+            .container{
+                width: 100%;
+                max-width: 800px;
+                margin: 0 auto;
+            }
+            
+            .movie{
+                padding: 20px;
+                margin: 20px 0;
+                background: #f7f7f7;
+                box-shadow: 0 15px 0 -10px #ddd;
+            }
+            
+            .title{
+                font-family: Impact, monospace;
+                font-size: 3em;
+                margin: .1em 0;
+                line-height: 1em;
+            }
+            
+            .time{
+                font-family: Helvetica, sans-serif;
+                font-size: .95em;
+                color: #777;
+            }
+            
+            .description{
+                font-family: Georgia, serif;
+                line-height: 1.5em;
+            }
+            
+            .poster{
+                float: left;
+                margin-right: 25px;
+                width: 40%;
+            }
+            
+            .clear{
+                clear: both;
+            }
+        </style>
+        
+    </head>
+    <body>
+        
+        <div class="container">
+            {{#movies}}
+
+                <div class="movie">
+                    <img class="poster" src="{{poster}}" alt="{{title}}">
+                    <h1 class="title">{{title}}</h1>
+                    <span class="time">{{duration}}</span>
+                    <p class="description">{{description}}</p>
+                    <div class="clear"></div>
+                </div>
+
+            {{/movies}}
+        </div>
+        
+    </body>
+</html>
