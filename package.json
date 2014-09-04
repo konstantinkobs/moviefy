@@ -2,7 +2,7 @@
   "name": "moviefy",
   "version": "0.1.0",
   "description": "CLI that creates an overview HTML document of your movie collection",
-  "main": "movie.js",
+  "main": "./bin/moviefy.js",
   "dependencies": {
     "mustache": "^0.8.2",
     "request": "^2.40.0"
