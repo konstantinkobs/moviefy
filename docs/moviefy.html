@@ -149,7 +149,8 @@
 program
     .version(<span class="hljs-built_in">require</span>(<span class="hljs-string">"../package.json"</span>).version)
     .option(<span class="hljs-string">"-l, --language [lang]"</span>, <span class="hljs-string">"specifies the language - as a ISO County Code [US]"</span>, <span class="hljs-string">"US"</span>)
-    .option(<span class="hljs-string">"-o, --output [name]"</span>, <span class="hljs-string">"which name the output HTML file should have [movies]"</span>, <span class="hljs-string">"movies"</span>);</pre></div></div>
+    .option(<span class="hljs-string">"-o, --output [name]"</span>, <span class="hljs-string">"which name the output HTML file should have [movies]"</span>, <span class="hljs-string">"movies"</span>)
+    .option(<span class="hljs-string">"-t, --template [name]"</span>, <span class="hljs-string">"choose template name: list | poster [list]"</span>, <span class="hljs-string">"list"</span>);</pre></div></div>
             
         </li>
         
@@ -378,6 +379,24 @@ save the JSON file in the directory.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-22">&#182;</a>
               </div>
+              <p>If there are no new movies, then just create the new
+HTML file.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">if</span>(newMovies.length === <span class="hljs-number">0</span>){
+    nextStep();
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
               <p>Go through all new movies and start the AJAX request</p>
 
             </div>
@@ -391,11 +410,11 @@ save the JSON file in the directory.</p>
         </li>
         
         
-        <li id="section-23">
+        <li id="section-24">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-23">&#182;</a>
+                <a class="pilcrow" href="#section-24">&#182;</a>
               </div>
               <p>This function queries the iTunes search API</p>
 
@@ -409,7 +428,29 @@ save the JSON file in the directory.</p>
         
         <span class="hljs-keyword">if</span> (!error &amp;&amp; response.statusCode == <span class="hljs-number">200</span>) {
             
-            <span class="hljs-keyword">var</span> result = <span class="hljs-built_in">JSON</span>.parse(body).results[<span class="hljs-number">0</span>];
+            <span class="hljs-keyword">var</span> json = <span class="hljs-built_in">JSON</span>.parse(body);
+            <span class="hljs-keyword">var</span> result = json.results[<span class="hljs-number">0</span>];</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <p>If the iTunes API sends back an error message
+there will be no other data.</p>
+<p>Then we should exit with this error.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">var</span> errorMessage = json.errorMessage;
+            <span class="hljs-keyword">if</span>(errorMessage){
+                <span class="hljs-built_in">console</span>.log(errorMessage);
+                process.exit(<span class="hljs-number">1</span>);
+            }
             
             createInfo(title, result);
             
@@ -432,11 +473,11 @@ save the JSON file in the directory.</p>
         </li>
         
         
-        <li id="section-24">
+        <li id="section-26">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-24">&#182;</a>
+                <a class="pilcrow" href="#section-26">&#182;</a>
               </div>
               <h2 id="link-construction">Link construction</h2>
 
@@ -445,11 +486,11 @@ save the JSON file in the directory.</p>
         </li>
         
         
-        <li id="section-25">
+        <li id="section-27">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-25">&#182;</a>
+                <a class="pilcrow" href="#section-27">&#182;</a>
               </div>
               <p>Constructs the link with all options that were given</p>
 
@@ -460,11 +501,11 @@ save the JSON file in the directory.</p>
         </li>
         
         
-        <li id="section-26">
+        <li id="section-28">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-26">&#182;</a>
+                <a class="pilcrow" href="#section-28">&#182;</a>
               </div>
               <p>Construct the URL</p>
 
@@ -475,11 +516,11 @@ save the JSON file in the directory.</p>
         </li>
         
         
-        <li id="section-27">
+        <li id="section-29">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-27">&#182;</a>
+                <a class="pilcrow" href="#section-29">&#182;</a>
               </div>
               <p>language option</p>
 
@@ -494,11 +535,11 @@ save the JSON file in the directory.</p>
         </li>
         
         
-        <li id="section-28">
+        <li id="section-30">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-28">&#182;</a>
+                <a class="pilcrow" href="#section-30">&#182;</a>
               </div>
               <p>This function sets the JSON for the movie
 and saves it to the disk.</p>
@@ -510,11 +551,11 @@ and saves it to the disk.</p>
         </li>
         
         
-        <li id="section-29">
+        <li id="section-31">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-29">&#182;</a>
+                <a class="pilcrow" href="#section-31">&#182;</a>
               </div>
               <p>This are the <strong>default values</strong> for an <code>info.json</code> file</p>
 
@@ -537,11 +578,11 @@ and saves it to the disk.</p>
         </li>
         
         
-        <li id="section-30">
+        <li id="section-32">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-30">&#182;</a>
+                <a class="pilcrow" href="#section-32">&#182;</a>
               </div>
               <p>If we found something in iTunes, we will overwrite these
 values.</p>
@@ -565,11 +606,11 @@ values.</p>
         </li>
         
         
-        <li id="section-31">
+        <li id="section-33">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-31">&#182;</a>
+                <a class="pilcrow" href="#section-33">&#182;</a>
               </div>
               <p>This is the callback function for having all new <code>info.json</code>
 files created. We then simply call the functions below for
@@ -588,11 +629,11 @@ finishing the process.</p>
         </li>
         
         
-        <li id="section-32">
+        <li id="section-34">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-32">&#182;</a>
+                <a class="pilcrow" href="#section-34">&#182;</a>
               </div>
               <h1 id="read-all-movie-information">Read all movie information</h1>
 
@@ -601,11 +642,11 @@ finishing the process.</p>
         </li>
         
         
-        <li id="section-33">
+        <li id="section-35">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-33">&#182;</a>
+                <a class="pilcrow" href="#section-35">&#182;</a>
               </div>
               <p>Now we need to read all the movie information from the
 corresponding <code>info.json</code> files.</p>
@@ -632,53 +673,13 @@ all movie titles of this directory are stored.</p>
         </li>
         
         
-        <li id="section-34">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-34">&#182;</a>
-              </div>
-              <h1 id="render-and-save-the-template">Render and save the template</h1>
-
-            </div>
-            
-        </li>
-        
-        
-        <li id="section-35">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-35">&#182;</a>
-              </div>
-              <p>We want to load the <code>template.html</code> file from disk
-and render that template with our generated <code>movie</code> list.</p>
-<p>At the end, we will save this file to the <strong>current</strong>
-directory, that means <em>the root folder</em> of our movies.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">renderTemplate</span><span class="hljs-params">(movies)</span></span>{
-    
-    <span class="hljs-keyword">var</span> dir = path.join(path.dirname(fs.realpathSync(__filename)), <span class="hljs-string">'../'</span>);
-    <span class="hljs-keyword">var</span> template = fs.readFileSync(dir + <span class="hljs-string">"/template.html"</span>);
-    <span class="hljs-keyword">var</span> output = Mustache.render(<span class="hljs-built_in">String</span>(template), movies);
-    
-    fs.writeFileSync(program.output + <span class="hljs-string">".html"</span>, output);
-    
-}</pre></div></div>
-            
-        </li>
-        
-        
         <li id="section-36">
             <div class="annotation">
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-36">&#182;</a>
               </div>
-              <h1 id="helper-functions">Helper functions</h1>
+              <h1 id="render-and-save-the-template">Render and save the template</h1>
 
             </div>
             
@@ -690,6 +691,54 @@ directory, that means <em>the root folder</em> of our movies.</p>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-37">&#182;</a>
+              </div>
+              <p>We want to load the <code>template.html</code> file from disk
+and render that template with our generated <code>movie</code> list.</p>
+<p>At the end, we will save this file to the <strong>current</strong>
+directory, that means <em>the root folder</em> of our movies.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">renderTemplate</span><span class="hljs-params">(movies)</span></span>{
+    
+    <span class="hljs-keyword">var</span> dir = path.join(path.dirname(fs.realpathSync(__filename)), <span class="hljs-string">'../templates'</span>);
+    
+    <span class="hljs-keyword">if</span>(fs.existsSync(dir + <span class="hljs-string">"/"</span> + program.template + <span class="hljs-string">".html"</span>)){
+        <span class="hljs-keyword">var</span> templateName = program.template;
+    } <span class="hljs-keyword">else</span>{
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"No valid template name - use default template"</span>);
+        <span class="hljs-keyword">var</span> templateName = <span class="hljs-string">"list"</span>;
+    }
+    
+    <span class="hljs-keyword">var</span> template = fs.readFileSync(dir + <span class="hljs-string">"/"</span> + templateName + <span class="hljs-string">".html"</span>);
+    <span class="hljs-keyword">var</span> output = Mustache.render(<span class="hljs-built_in">String</span>(template), movies);
+    
+    fs.writeFileSync(program.output + <span class="hljs-string">".html"</span>, output);
+    
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-38">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-38">&#182;</a>
+              </div>
+              <h1 id="helper-functions">Helper functions</h1>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-39">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-39">&#182;</a>
               </div>
               <p>This function converts milliseconds into human readable
 time strings.</p>
@@ -712,11 +761,11 @@ time strings.</p>
         </li>
         
         
-        <li id="section-38">
+        <li id="section-40">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-38">&#182;</a>
+                <a class="pilcrow" href="#section-40">&#182;</a>
               </div>
               <p>This function slices the year from the given
 releaseDate string.</p>
@@ -730,11 +779,11 @@ releaseDate string.</p>
         </li>
         
         
-        <li id="section-39">
+        <li id="section-41">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-39">&#182;</a>
+                <a class="pilcrow" href="#section-41">&#182;</a>
               </div>
               <p>A function that constructs a link
 to a bigger image (600x600)</p>

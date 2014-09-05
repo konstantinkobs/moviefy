@@ -131,7 +131,8 @@ function getInfo(title){
         
         if (!error && response.statusCode == 200) {
             
-            var result = JSON.parse(body).results[0];
+            var json = JSON.parse(body);
+            var result = json.results[0];
             
             createInfo(title, result);
             
