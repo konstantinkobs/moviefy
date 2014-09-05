@@ -20,7 +20,8 @@ var fs = require("fs"),
 program
     .version(require("../package.json").version)
     .option("-l, --language [lang]", "specifies the language - as a ISO County Code [US]", "US")
-    .option("-o, --output [name]", "which name the output HTML file should have [movies]", "movies");
+    .option("-o, --output [name]", "which name the output HTML file should have [movies]", "movies")
+    .option("-t, --template [name]", "choose template name: list | poster [list]", "list");
 
 
 // Get all movies
@@ -249,7 +250,15 @@ function readAllInfo(){
 function renderTemplate(movies){
     
     var dir = path.join(path.dirname(fs.realpathSync(__filename)), '../templates');
-    var template = fs.readFileSync(dir + "/list.html");
+    
+    if(fs.existsSync(dir + "/" + program.template + ".html")){
+        var templateName = program.template;
+    } else{
+        console.log("No valid template name - use default template");
+        var templateName = "list";
+    }
+    
+    var template = fs.readFileSync(dir + "/" + templateName + ".html");
     var output = Mustache.render(String(template), movies);
     
     fs.writeFileSync(program.output + ".html", output);
