@@ -72,3 +72,25 @@ You can choose the output for the resulting HTML page by using the `--output [na
 `$ moviefy -o filme`
 
 Default is `movies`.
+
+#### template
+
+You can choose a template by specify its name.
+
+At the moment, there are two templates: list *(default)* and poster
+
+##### Template: list
+`moviefy -t list`
+
+![Template: list](https://cloud.githubusercontent.com/assets/4562885/4163953/e11f52a4-34ed-11e4-905a-5ebb62fefbd8.png)
+
+##### Template: poster
+`moviefy -t poster`
+
+![Template: poster](https://cloud.githubusercontent.com/assets/4562885/4163952/e10746fa-34ed-11e4-8d21-bc67487ababf.png)
+
+*After you click on a tile:*
+![Template: poster](https://cloud.githubusercontent.com/assets/4562885/4163954/e1289800-34ed-11e4-90c1-ac237a56a90c.png)
+
+
+*© iTunes for posters and information about the movies*
