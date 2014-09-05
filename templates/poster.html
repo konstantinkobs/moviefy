@@ -1,0 +1,176 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Movies</title>
+        
+        <style>
+            *{
+                -moz-box-sizing: border-box;
+                box-sizing: border-box;
+            }
+            
+            html, body{
+                margin: 0;
+                padding: 0;
+            }
+            
+            body{
+                background: #eee;
+            }
+            
+            .container{
+                width: 100%;
+                max-width: 900px;
+                margin: 0 auto;
+            }
+            
+            .movie{
+                padding: 20px;
+                background: #f7f7f7;
+                border: 5px solid #eee;
+                
+                display: inline-block;
+                width: 33.333%;
+                vertical-align: top;
+                
+                margin-bottom: 20px;
+                
+                cursor: pointer;
+            }
+            
+            .title{
+                font-family: Impact, monospace;
+                font-size: 3em;
+                margin: .1em 0;
+                line-height: 1em;
+            }
+            
+            .time,
+            .year,
+            .genre{
+                display: block;
+                font-family: Helvetica, sans-serif;
+                font-size: .95em;
+                
+                padding-top: 3px;
+            }
+            
+            .time{
+                color: #acacac;
+            }
+            .year{
+                color: #c1c1c1;
+            }
+            .genre{
+                color: #909090;
+            }
+            
+            #description{
+                font-family: Georgia, serif;
+                line-height: 1.5em;
+                
+                padding: 40px;
+                
+                width: 100%;
+                max-width: 400px;
+                
+                max-height: 100%;
+                overflow: auto;
+                
+                background: rgba(255,255,255,0.95);
+                
+                position: fixed;
+                top: 0;
+                left: -400px;
+                bottom: 0;
+                
+                -webkit-transition: left .5s ease;
+                
+                transition: left .5s ease;
+            }
+            
+            .showDescription{
+                left: 0 !important;
+            }
+            
+            #descriptionLayer{
+                position: fixed;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                right: 0;
+                
+                pointer-events: none;
+                cursor: pointer;
+                
+                background: rgba(0,0,0,0.6);
+                
+                opacity: 0;
+                
+                -webkit-transition: opacity .3s ease;
+                
+                transition: opacity .3s ease;
+            }
+            
+            .showDescriptionLayer{
+                opacity: 1 !important;
+                pointer-events: all !important;
+            }
+            
+            .no-scroll{
+                overflow: hidden;
+            }
+            
+            .poster{
+                width: 100%;
+            }
+        </style>
+        
+    </head>
+    <body>
+        
+        <div id="descriptionLayer"></div>
+        <div id="description"></div>
+        
+        <div class="container">
+           
+            {{#movies}}<div class="movie" data-description="<h1 class='title'>{{title}}</h1>{{description}}">
+                    {{#poster}}
+                        <img class="poster" src="{{poster}}" alt="{{title}}">
+                    {{/poster}}
+                    <h1 class="title">{{title}}</h1>
+                    <span class="time">{{duration}}</span>
+                    <span class="year">{{year}}</span>
+                    <span class="genre">{{genre}}</span>
+                </div>{{/movies}}
+        </div>
+        
+        
+        
+        <script>
+            var allMovies = document.getElementsByClassName("movie"),
+                descriptionPanel = document.getElementById("description"),
+                descriptionLayer = document.getElementById("descriptionLayer");
+            
+            var showDescription = function(){
+                var description = this.getAttribute("data-description");
+                descriptionPanel.innerHTML = description;
+                descriptionPanel.classList.add("showDescription");
+                descriptionLayer.classList.add("showDescriptionLayer");
+                document.body.classList.add("no-scroll");
+            }
+            
+            for(var i = 0; i < allMovies.length; i++){
+                allMovies[i].addEventListener("click", showDescription);
+            }
+            
+            descriptionLayer.addEventListener("click", function(){
+                descriptionPanel.classList.remove("showDescription");
+                descriptionLayer.classList.remove("showDescriptionLayer");
+                document.body.classList.remove("no-scroll");
+            })
+        </script>
+        
+    </body>
+</html>

@@ -108,6 +108,12 @@ var newMovies = movieList.filter(function(element){
 // For every new movie, search the iTunes API and
 // save the JSON file in the directory.
 
+// If there are no new movies, then just create the new
+// HTML file.
+if(newMovies.length === 0){
+    nextStep();
+}
+
 // Go through all new movies and start the AJAX request
 for(var i = 0; i < newMovies.length; i++){
     getInfo(newMovies[i]);
@@ -242,8 +248,8 @@ function readAllInfo(){
 
 function renderTemplate(movies){
     
-    var dir = path.join(path.dirname(fs.realpathSync(__filename)), '../');
-    var template = fs.readFileSync(dir + "/template.html");
+    var dir = path.join(path.dirname(fs.realpathSync(__filename)), '../templates');
+    var template = fs.readFileSync(dir + "/list.html");
     var output = Mustache.render(String(template), movies);
     
     fs.writeFileSync(program.output + ".html", output);
